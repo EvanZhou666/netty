@@ -49,6 +49,11 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * <p>When not used in a {@link ServerBootstrap} context, the {@link #bind()} methods are useful for connectionless
  * transports such as datagram (UDP).</p>
+ *
+ * <p>中文翻译：</br>
+ * 帮助轻松启动{@link Channel}的帮助类，配置 {@link AbstractBootstrap}时支持流式的方法调用</br>
+ * 当不在{@link ServerBootstrap}上下文中使用时，{@link #bind()}方法对无连接传输（如数据报（UDP））很有用
+ * </p>
  */
 public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C extends Channel> implements Cloneable {
     @SuppressWarnings("unchecked")
@@ -85,6 +90,9 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
     /**
      * The {@link EventLoopGroup} which is used to handle all the events for the to-be-created
      * {@link Channel}
+     * <p>中文翻译：</br>
+     * {@link EventLoopGroup}用于处理{@link Channel}的所有事件的。
+     * </p>
      */
     public B group(EventLoopGroup group) {
         ObjectUtil.checkNotNull(group, "group");
@@ -101,9 +109,9 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
     }
 
     /**
-     * The {@link Class} which is used to create {@link Channel} instances from.
-     * You either use this or {@link #channelFactory(io.netty.channel.ChannelFactory)} if your
-     * {@link Channel} implementation has no no-args constructor.
+     * The {@link Class}用于创建{@link Channel}实例。
+     * 如果你的{@link Channel}实现是无参数构造器，你可以用这种方式创建{@link Channel}或者使用{@link #channelFactory(io.netty.channel.ChannelFactory)}
+     *
      */
     public B channel(Class<? extends C> channelClass) {
         return channelFactory(new ReflectiveChannelFactory<C>(

@@ -19,7 +19,8 @@ package io.netty.channel;
 import java.io.Serializable;
 
 /**
- * Represents the globally unique identifier of a {@link Channel}.
+ * 代表 {@link Channel} 的全局唯一标识符
+ *
  * <p>
  * The identifier is generated from various sources listed in the following:
  * <ul>

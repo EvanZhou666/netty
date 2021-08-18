@@ -18,7 +18,7 @@
  * <p>
  * @see io.netty.example.udt
  *
- * @deprecated The UDT transport is no longer maintained and will be removed.
+ * @deprecated The UDT transport 将不再维护，未来会被移除掉。
  */
 package io.netty.channel.udt;
 

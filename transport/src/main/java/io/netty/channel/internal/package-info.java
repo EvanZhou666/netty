@@ -15,6 +15,7 @@
  */
 
 /**
+ * channel implementation的内部工具类
  * Internal utilities for channel implementations.
  */
 package io.netty.channel.internal;

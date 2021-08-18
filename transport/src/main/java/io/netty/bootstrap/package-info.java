@@ -15,7 +15,6 @@
  */
 
 /**
- * The helper classes with fluent API which enable an easy implementation of
- * typical client side and server side channel initialization.
+ * 具有流畅 API 的辅助类，可以轻松实现典型的客户端的channel和服务器端的channel初始化。
  */
 package io.netty.bootstrap;

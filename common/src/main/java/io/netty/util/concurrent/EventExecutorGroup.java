@@ -22,16 +22,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The {@link EventExecutorGroup} is responsible for providing the {@link EventExecutor}'s to use
- * via its {@link #next()} method. Besides this, it is also responsible for handling their
- * life-cycle and allows shutting them down in a global fashion.
+ * {@link EventExecutorGroup}作用：
+ * 通过{@link #next()}方法提供{@link EventExecutor}事件执行器（可能会有多个）
+ * 此外，它还负责处理事件执行器的生命周期，并允许以全局方式关闭它们
  *
  */
 public interface EventExecutorGroup extends ScheduledExecutorService, Iterable<EventExecutor> {
 
     /**
-     * Returns {@code true} if and only if all {@link EventExecutor}s managed by this {@link EventExecutorGroup}
-     * are being {@linkplain #shutdownGracefully() shut down gracefully} or was {@linkplain #isShutdown() shut down}.
+     * 当且仅当此 {@link EventExecutorGroup} 管理的所有 {@link EventExecutor} 都被 {@linkplain shutdownGracefully() 正常关闭} 或 {@linkplain isShutdown() 关闭} 时返回 {@code true}.
      */
     boolean isShuttingDown();
 
@@ -79,7 +78,7 @@ public interface EventExecutorGroup extends ScheduledExecutorService, Iterable<E
     List<Runnable> shutdownNow();
 
     /**
-     * Returns one of the {@link EventExecutor}s managed by this {@link EventExecutorGroup}.
+     * 返回由此 {@link EventExecutorGroup} 管理的 {@link EventExecutor} 之一。
      */
     EventExecutor next();
 

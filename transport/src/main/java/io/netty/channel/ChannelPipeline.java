@@ -30,20 +30,19 @@ import java.util.NoSuchElementException;
 
 
 /**
- * A list of {@link ChannelHandler}s which handles or intercepts inbound events and outbound operations of a
- * {@link Channel}.  {@link ChannelPipeline} implements an advanced form of the
- * <a href="https://www.oracle.com/technetwork/java/interceptingfilter-142169.html">Intercepting Filter</a> pattern
- * to give a user full control over how an event is handled and how the {@link ChannelHandler}s in a pipeline
- * interact with each other.
+ * 处理后者拦截{@link Channel}的inbound事件或者{@link Channel}的outbound操作的List集合。
+ * {@link ChannelPipeline} 实现了拦截过滤器的高级形式。
+ * ChannelPipeline实现了拦截过滤器的一种高级形式。
+ * <a href="https://www.oracle.com/technetwork/java/interceptingfilter-142169.html">拦截过滤器</a>模式，让用户完全控制事件的处理方式，以及管道中的ChannelHandlers如何相互作用。
  *
- * <h3>Creation of a pipeline</h3>
+ * <h3>pipeline创建</h3>
  *
- * Each channel has its own pipeline and it is created automatically when a new channel is created.
+ * 每个channel都有自己的pipeline，当一个新的channel被创建时，pipeline会自动被创建。
  *
- * <h3>How an event flows in a pipeline</h3>
+ * <h3>事件是如何在pipeline中流转的</h3>
  *
- * The following diagram describes how I/O events are processed by {@link ChannelHandler}s in a {@link ChannelPipeline}
- * typically. An I/O event is handled by either a {@link ChannelInboundHandler} or a {@link ChannelOutboundHandler}
+ * 下图描述了 I/O 事件通常如何由 {@link ChannelPipeline} 中的 {@link ChannelHandler} 处理。
+ *  An I/O event is handled by either a {@link ChannelInboundHandler} or a {@link ChannelOutboundHandler}
  * and be forwarded to its closest handler by calling the event propagation methods defined in
  * {@link ChannelHandlerContext}, such as {@link ChannelHandlerContext#fireChannelRead(Object)} and
  * {@link ChannelHandlerContext#write(Object)}.

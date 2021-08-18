@@ -38,7 +38,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.RejectedExecutionException;
 
 /**
- * A skeletal {@link Channel} implementation.
+ * {@link Channel} 实现骨架 （A skeletal implementation）
+ *
  */
 public abstract class AbstractChannel extends DefaultAttributeMap implements Channel {
 
@@ -106,15 +107,16 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
     }
 
     /**
-     * Returns a new {@link DefaultChannelId} instance. Subclasses may override this method to assign custom
-     * {@link ChannelId}s to {@link Channel}s that use the {@link AbstractChannel#AbstractChannel(Channel)} constructor.
+     * 返回一个新的{@link DefaultChannelId}实例。子类可以重写这个方法，可以给通过{@link AbstractChannel#AbstractChannel(Channel)}创建的{@link Channel}分配自定义的{@link ChannelId}
+     *
      */
     protected ChannelId newId() {
         return DefaultChannelId.newInstance();
     }
 
     /**
-     * Returns a new {@link DefaultChannelPipeline} instance.
+     * 返回新的{@link DefaultChannelPipeline}实例
+     *
      */
     protected DefaultChannelPipeline newChannelPipeline() {
         return new DefaultChannelPipeline(this);

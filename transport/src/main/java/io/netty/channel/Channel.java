@@ -28,56 +28,48 @@ import java.net.SocketAddress;
 
 
 /**
- * A nexus to a network socket or a component which is capable of I/O
- * operations such as read, write, connect, and bind.
- * <p>
+ * 与网络socket套接字或具有I/O能力（如read，write，connect，bind）的组件交流的纽带
  * A channel provides a user:
  * <ul>
- * <li>the current state of the channel (e.g. is it open? is it connected?),</li>
- * <li>the {@linkplain ChannelConfig configuration parameters} of the channel (e.g. receive buffer size),</li>
- * <li>the I/O operations that the channel supports (e.g. read, write, connect, and bind), and</li>
- * <li>the {@link ChannelPipeline} which handles all I/O events and requests
- *     associated with the channel.</li>
+ *     <li>channel的当前状态 (例如 is it open? is it connected?),</li>
+ *     <li>channel的配置参数 {@linkplain ChannelConfig configuration parameters}(例如 receive buffer size),</li>
+ *     <li>channel 支持的I/O操作(e.g. read, write, connect, and bind), and</li>
+ *     <li>处理此通道所有I/O事件和请求的the {@link ChannelPipeline}</li>
  * </ul>
  *
- * <h3>All I/O operations are asynchronous.</h3>
+ * <h3>所有 I/O 操作都是异步的</h3>
+ * 在Netty中，所有的I/O操作都是异步的，这意味着任何I/O调用都会立即返回，不管I/O请求操作有没有完成。
+ * 实际上，I/O调用将返回一个 {@link ChannelFuture} 实例，该实例将在请求的 IO 操作成功、失败或取消时通知您。
  * <p>
- * All I/O operations in Netty are asynchronous.  It means any I/O calls will
- * return immediately with no guarantee that the requested I/O operation has
- * been completed at the end of the call.  Instead, you will be returned with
- * a {@link ChannelFuture} instance which will notify you when the requested I/O
- * operation has succeeded, failed, or canceled.
  *
- * <h3>Channels are hierarchical</h3>
- * <p>
- * A {@link Channel} can have a {@linkplain #parent() parent} depending on
- * how it was created.  For instance, a {@link SocketChannel}, that was accepted
+ * <h3>Channels 是有继承结构的（hierarchical）</h3>
+ * <p> a {@link SocketChannel}
+ * {@link Channel}能够拥有parent Channel，这取决于它是怎么被创建的。</br>
+ * 例如， a {@link SocketChannel}, that was accepted
  * by {@link ServerSocketChannel}, will return the {@link ServerSocketChannel}
  * as its parent on {@link #parent()}.
  * <p>
- * The semantics of the hierarchical structure depends on the transport
- * implementation where the {@link Channel} belongs to.  For example, you could
- * write a new {@link Channel} implementation that creates the sub-channels that
- * share one socket connection, as <a href="http://beepcore.org/">BEEP</a> and
+ * channel继承结构的语义取决于channel的传输实现（transport implementation）</br>
+ * 例如，你能够实现一个{@link Channel}新的实现，这个新的实现能够创建子channel（sub-channels），这些子channel共享一个socket connection。</br>
+ * as <a href="http://beepcore.org/">BEEP</a> and
  * <a href="https://en.wikipedia.org/wiki/Secure_Shell">SSH</a> do.
  *
- * <h3>Downcast to access transport-specific operations</h3>
+ * <h3>可以向下强转，以便能访问某些特殊的传输方法。</h3>
  * <p>
- * Some transports exposes additional operations that is specific to the
- * transport.  Down-cast the {@link Channel} to sub-type to invoke such
- * operations.  For example, with the old I/O datagram transport, multicast
- * join / leave operations are provided by {@link DatagramChannel}.
+ * 有些传输（transports）暴露了特定于某种传输的额外的操作。{@link Channel}向下强转为子类型才可以调用这些操作。</br>
+ * 例如：with the old I/O datagram transport, multicast join / leave operations are provided by {@link DatagramChannel}.
  *
- * <h3>Release resources</h3>
+ * <h3>释放资源</h3>
  * <p>
- * It is important to call {@link #close()} or {@link #close(ChannelPromise)} to release all
- * resources once you are done with the {@link Channel}. This ensures all resources are
- * released in a proper way, i.e. filehandles.
+ * 调用 {@link #close()} or {@link #close(ChannelPromise)}释放{@link Channel}使用的资源十分重要，
+ * 确保所有的资源能以正确的方式释放，例如filehandles
+ *
  */
 public interface Channel extends AttributeMap, ChannelOutboundInvoker, Comparable<Channel> {
 
     /**
-     * Returns the globally unique identifier of this {@link Channel}.
+     * 返回{@link Channel}的全局唯一的标志符
+     *
      */
     ChannelId id();
 

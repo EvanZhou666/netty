@@ -27,8 +27,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Abstract base class for {@link EventExecutorGroup} implementations that handles their tasks with multiple threads at
- * the same time.
+ *
+ * {@link EventExecutorGroup} 实现的抽象基类，用多线程同时处理多任务。
  */
 public abstract class MultithreadEventExecutorGroup extends AbstractEventExecutorGroup {
 
@@ -39,7 +39,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
     private final EventExecutorChooserFactory.EventExecutorChooser chooser;
 
     /**
-     * Create a new instance.
+     * 创建一个新实例
      *
      * @param nThreads          the number of threads that will be used by this instance.
      * @param threadFactory     the ThreadFactory to use, or {@code null} if the default should be used.
@@ -50,7 +50,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
     }
 
     /**
-     * Create a new instance.
+     * 创建一个新实例
      *
      * @param nThreads          the number of threads that will be used by this instance.
      * @param executor          the Executor to use, or {@code null} if the default should be used.
@@ -61,7 +61,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
     }
 
     /**
-     * Create a new instance.
+     * 创建一个新实例
      *
      * @param nThreads          the number of threads that will be used by this instance.
      * @param executor          the Executor to use, or {@code null} if the default should be used.
@@ -143,16 +143,14 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
     }
 
     /**
-     * Return the number of {@link EventExecutor} this implementation uses. This number is the maps
-     * 1:1 to the threads it use.
+     * 返回此实现使用的 {@link EventExecutor} 的数量。 这个数字是它使用的线程 1:1 的映射。
      */
     public final int executorCount() {
         return children.length;
     }
 
     /**
-     * Create a new EventExecutor which will later then accessible via the {@link #next()}  method. This method will be
-     * called for each thread that will serve this {@link MultithreadEventExecutorGroup}.
+     * 创建一个新的 EventExecutor，稍后可以通过 {@link next()} 方法访问它. 这个方法将会被服务于{@link MultithreadEventExecutorGroup}的每个线程调用
      *
      */
     protected abstract EventExecutor newChild(Executor executor, Object... args) throws Exception;

@@ -30,20 +30,20 @@ public interface EventLoopGroup extends EventExecutorGroup {
     EventLoop next();
 
     /**
-     * Register a {@link Channel} with this {@link EventLoop}. The returned {@link ChannelFuture}
-     * will get notified once the registration was complete.
+     *使用此 {@link EventLoop} 注册一个 {@link Channel}. 注册完成后，返回的 {@link ChannelFuture} 将收到通知。
      */
     ChannelFuture register(Channel channel);
 
     /**
-     * Register a {@link Channel} with this {@link EventLoop} using a {@link ChannelFuture}. The passed
-     * {@link ChannelFuture} will get notified once the registration was complete and also will get returned.
+     * 使用 {@link ChannelFuture} 向此 {@link EventLoop} 注册 {@link Channel}.
+     * 一旦注册完成，被传递的ChannelFuture将得到通知，同时也将被返回。
+     * .
      */
     ChannelFuture register(ChannelPromise promise);
 
     /**
-     * Register a {@link Channel} with this {@link EventLoop}. The passed {@link ChannelFuture}
-     * will get notified once the registration was complete and also will get returned.
+     * 使用此 {@link EventLoop} 注册一个 {@link Channel}。
+     * 一旦注册完成，被传递的ChannelFuture将得到通知，同时也将被返回。
      *
      * @deprecated Use {@link #register(ChannelPromise)} instead.
      */

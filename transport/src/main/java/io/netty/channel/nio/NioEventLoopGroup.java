@@ -33,37 +33,39 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * {@link MultithreadEventLoopGroup} implementations which is used for NIO {@link Selector} based {@link Channel}s.
+ *
+ * 实现了{@link MultithreadEventLoopGroup}，用于基于 NIO {@link Selector} 的 {@link Channel}s。
  */
 public class NioEventLoopGroup extends MultithreadEventLoopGroup {
 
     /**
-     * Create a new instance using the default number of threads, the default {@link ThreadFactory} and
-     * the {@link SelectorProvider} which is returned by {@link SelectorProvider#provider()}.
+     *
+     * 使用默认线程数、默认 {@link ThreadFactory} 和 {@link SelectorProvider#provider()} 返回的 {@link SelectorProvider} 创建一个新实例。
      */
     public NioEventLoopGroup() {
         this(0);
     }
 
     /**
-     * Create a new instance using the specified number of threads, {@link ThreadFactory} and the
-     * {@link SelectorProvider} which is returned by {@link SelectorProvider#provider()}.
+     * 使用指定数量的线程 {@link ThreadFactory} 和 {@link SelectorProvider#provider()} 返回的 {@link SelectorProvider} 创建一个新实例
+     *
      */
     public NioEventLoopGroup(int nThreads) {
         this(nThreads, (Executor) null);
     }
 
     /**
-     * Create a new instance using the default number of threads, the given {@link ThreadFactory} and the
-     * {@link SelectorProvider} which is returned by {@link SelectorProvider#provider()}.
+     *
+     * 使用默认线程数、给定的 {@link ThreadFactory} 和 {@link SelectorProvider#provider()} 返回的 {@link SelectorProvider} 创建一个新实例。
+     *
      */
     public NioEventLoopGroup(ThreadFactory threadFactory) {
         this(0, threadFactory, SelectorProvider.provider());
     }
 
     /**
-     * Create a new instance using the specified number of threads, the given {@link ThreadFactory} and the
-     * {@link SelectorProvider} which is returned by {@link SelectorProvider#provider()}.
+     * 使用指定数量的线程、给定的 {@link ThreadFactory} 和 {@link SelectorProvider#provider()} 返回的 {@link SelectorProvider} 创建一个新实例。
+     *
      */
     public NioEventLoopGroup(int nThreads, ThreadFactory threadFactory) {
         this(nThreads, threadFactory, SelectorProvider.provider());
@@ -74,8 +76,8 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
     }
 
     /**
-     * Create a new instance using the specified number of threads, the given {@link ThreadFactory} and the given
-     * {@link SelectorProvider}.
+     * 使用指定数量的线程、给定的 {@link ThreadFactory} 和给定的 {@link SelectorProvider} 创建一个新实例。
+     *
      */
     public NioEventLoopGroup(
             int nThreads, ThreadFactory threadFactory, final SelectorProvider selectorProvider) {
@@ -121,15 +123,13 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
     }
 
     /**
-     * @param nThreads the number of threads that will be used by this instance.
-     * @param executor the Executor to use, or {@code null} if default one should be used.
-     * @param chooserFactory the {@link EventExecutorChooserFactory} to use.
-     * @param selectorProvider the {@link SelectorProvider} to use.
-     * @param selectStrategyFactory the {@link SelectStrategyFactory} to use.
-     * @param rejectedExecutionHandler the {@link RejectedExecutionHandler} to use.
-     * @param taskQueueFactory the {@link EventLoopTaskQueueFactory} to use for
-     *                         {@link SingleThreadEventLoop#execute(Runnable)},
-     *                         or {@code null} if default one should be used.
+     * @param nThreads 此实例将使用的线程数。
+     * @param executor 要使用的 Executor，或者 {@code null} 如果应该使用默认值。
+     * @param chooserFactory 要使用的 {@link EventExecutorChooserFactory}。
+     * @param selectorProvider 要使用的 {@link SelectorProvider}。
+     * @param selectStrategyFactory 要使用的 {@link SelectStrategyFactory}。
+     * @param rejectedExecutionHandler 要使用的 {@link RejectedExecutionHandler}。
+     * @param taskQueueFactory 要使用的 the {@link EventLoopTaskQueueFactory} for {@link SingleThreadEventLoop#execute(Runnable)}，为null意味着使用默认值
      * @param tailTaskQueueFactory the {@link EventLoopTaskQueueFactory} to use for
      *                             {@link SingleThreadEventLoop#executeAfterEventLoopIteration(Runnable)},
      *                             or {@code null} if default one should be used.
@@ -145,8 +145,8 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
     }
 
     /**
-     * Sets the percentage of the desired amount of time spent for I/O in the child event loops.  The default value is
-     * {@code 50}, which means the event loop will try to spend the same amount of time for I/O as for non-I/O tasks.
+     * 设置子事件循环中用于 I/O 的所需时间百分比，默认是50%。
+     * 这意味着事件循环将尝试为 IO 花费与非 IO 任务相同的时间。
      */
     public void setIoRatio(int ioRatio) {
         for (EventExecutor e: this) {
@@ -155,8 +155,7 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
     }
 
     /**
-     * Replaces the current {@link Selector}s of the child event loops with newly created {@link Selector}s to work
-     * around the  infamous epoll 100% CPU bug.
+     * 用新创建的 {@link Selector} 替换子事件循环的当前 {@link Selector}，以解决臭名昭著的 epoll 100% CPU 错误。
      */
     public void rebuildSelectors() {
         for (EventExecutor e: this) {
