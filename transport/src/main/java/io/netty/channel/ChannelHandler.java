@@ -26,15 +26,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Handles an I/O event or intercepts an I/O operation, and forwards it to its next handler in
- * its {@link ChannelPipeline}.
+ * 处理 IO 事件或拦截 IO 操作，并将其转发到ChannelPipeline中的下一个处理程序。
  *
  * <h3>Sub-types</h3>
  * <p>
- * {@link ChannelHandler} itself does not provide many methods, but you usually have to implement one of its subtypes:
+ * ChannelHandler 本身并没有提供很多方法，但是您通常必须实现其子类型之一：
  * <ul>
- * <li>{@link ChannelInboundHandler} to handle inbound I/O events, and</li>
- * <li>{@link ChannelOutboundHandler} to handle outbound I/O operations.</li>
+ * <li>ChannelInboundHandler 处理入站 IO 事件，以及</li>
+ * <li>ChannelOutboundHandler 处理出站 IO 操作。</li>
  * </ul>
  * </p>
  * <p>
@@ -51,16 +50,12 @@ import java.lang.annotation.Target;
  *
  * <h3>The context object</h3>
  * <p>
- * A {@link ChannelHandler} is provided with a {@link ChannelHandlerContext}
- * object.  A {@link ChannelHandler} is supposed to interact with the
- * {@link ChannelPipeline} it belongs to via a context object.  Using the
- * context object, the {@link ChannelHandler} can pass events upstream or
- * downstream, modify the pipeline dynamically, or store the information
- * (using {@link AttributeKey}s) which is specific to the handler.
+ * ChannelHandler 与 ChannelHandlerContext 对象一起提供。 ChannelHandler 应该通过上下文对象与其所属的 ChannelPipeline 进行交互。
+ * Using the context object, the  ChannelHandler can pass events upstream or downstream, modify the pipeline dynamically, or store the information (using {@link AttributeKey}s) which is specific to the handler.
  *
  * <h3>State management</h3>
  *
- * A {@link ChannelHandler} often needs to store some stateful information.
+ * ChannelHandler 通常需要存储一些有状态的信息。
  * The simplest and recommended approach is to use member variables:
  * <pre>
  * public interface Message {
@@ -87,10 +82,7 @@ import java.lang.annotation.Target;
  *     ...
  * }
  * </pre>
- * Because the handler instance has a state variable which is dedicated to
- * one connection, you have to create a new handler instance for each new
- * channel to avoid a race condition where a unauthenticated client can get
- * the confidential information:
+ * Because the handler instance has a state variable which is dedicated to one connection, you have to create a new handler instance for each new channel to avoid a race condition where a unauthenticated client can get the confidential information:
  * <pre>
  * // Create a new handler instance per channel.
  * // See {@link ChannelInitializer#initChannel(Channel)}.
@@ -139,13 +131,13 @@ import java.lang.annotation.Target;
  * Now that the state of the handler is attached to the {@link ChannelHandlerContext}, you can add the
  * same handler instance to different pipelines:
  * <pre>
- * public class DataServerInitializer extends {@link ChannelInitializer}&lt;{@link Channel}&gt; {
+ * public class DataServerInitializer extends  ChannelInitializer<Channel> {
  *
- *     private static final DataServerHandler <b>SHARED</b> = new DataServerHandler();
+ *     private static final DataServerHandler SHARED = new DataServerHandler();
  *
- *     {@code @Override}
- *     public void initChannel({@link Channel} channel) {
- *         channel.pipeline().addLast("handler", <b>SHARED</b>);
+ *     @Override
+ *     public void initChannel(Channel channel) {
+ *         channel.pipeline().addLast("handler", SHARED);
  *     }
  * }
  * </pre>
@@ -153,9 +145,12 @@ import java.lang.annotation.Target;
  *
  * <h4>The {@code @Sharable} annotation</h4>
  * <p>
- * In the example above which used an {@link AttributeKey},
- * you might have noticed the {@code @Sharable} annotation.
+ * In the example above which used an  AttributeKey,
+ * you might have noticed the @Sharable annotation.
  * <p>
+ * 如果 ChannelHandler 使用 @Sharable 注解行批注，则意味着您可以只创建一次处理程序实例并将其多次添加到一个或多个 ChannelPipelines 中，而不会出现竞争条件。
+ *
+ * 提供此注释用于文档目的， just like the JCIP annotations.
  * If a {@link ChannelHandler} is annotated with the {@code @Sharable}
  * annotation, it means you can create an instance of the handler just once and
  * add it to one or more {@link ChannelPipeline}s multiple times without

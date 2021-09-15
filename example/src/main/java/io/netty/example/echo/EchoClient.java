@@ -24,6 +24,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
@@ -72,7 +73,7 @@ public final class EchoClient {
 
             // Start the client.
             ChannelFuture f = b.connect(HOST, PORT).sync();
-
+            f.channel().writeAndFlush("李四");
             // Wait until the connection is closed.
             f.channel().closeFuture().sync();
         } finally {

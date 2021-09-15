@@ -132,6 +132,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         setChannelOptions(channel, newOptionsArray(), logger);
         setAttributes(channel, newAttributesArray());
 
+        // p = DefaultChannelPipeline
         ChannelPipeline p = channel.pipeline();
 
         final EventLoopGroup currentChildGroup = childGroup;
@@ -142,6 +143,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         p.addLast(new ChannelInitializer<Channel>() {
             @Override
             public void initChannel(final Channel ch) {
+                // 加个断点，看什么时候触发 由NioEventLoopGroup中的线程触发initChannel初始化动作
                 final ChannelPipeline pipeline = ch.pipeline();
                 ChannelHandler handler = config.handler();
                 if (handler != null) {

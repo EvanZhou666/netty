@@ -53,6 +53,7 @@ public final class DefaultEventExecutorChooserFactory implements EventExecutorCh
 
         @Override
         public EventExecutor next() {
+            // 实际上就是为了取余数，简单的负载均衡，取哪一个executor而已
             return executors[idx.getAndIncrement() & executors.length - 1];
         }
     }

@@ -207,7 +207,11 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
      */
     protected Runnable pollTask() {
         assert inEventLoop();
-        return pollTaskFrom(taskQueue);
+        Runnable task = pollTaskFrom(taskQueue);
+        if (task !=null) {
+            System.out.println("-------代码review，出队列任务-----" + task.getClass());
+        }
+        return task;
     }
 
     protected static Runnable pollTaskFrom(Queue<Runnable> taskQueue) {

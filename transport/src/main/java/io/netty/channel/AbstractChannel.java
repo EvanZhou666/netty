@@ -470,6 +470,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                 promise.setFailure(new IllegalStateException("registered to an event loop already"));
                 return;
             }
+            // 如果给定的eventLoop与要求的EventLoop类型一致，则为true，此处我调试的时候要求是NioEventLoop的实例
             if (!isCompatible(eventLoop)) {
                 promise.setFailure(
                         new IllegalStateException("incompatible event loop type: " + eventLoop.getClass().getName()));
@@ -478,10 +479,11 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
 
             AbstractChannel.this.eventLoop = eventLoop;
 
-            if (eventLoop.inEventLoop()) {
+            if (eventLoop.inEventLoop()) { // todo 代码review 怎么判断事件是否在循环中
                 register0(promise);
             } else {
                 try {
+                    // 异步注册ServerSocketChannel到selector
                     eventLoop.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -511,8 +513,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                 neverRegistered = false;
                 registered = true;
 
-                // Ensure we call handlerAdded(...) before we actually notify the promise. This is needed as the
-                // user may already fire events through the pipeline in the ChannelFutureListener.
+                // 在实际上通知promise之前，确保调用了handlerAdded()方法，因为用户可能通过pipline流水线中ChannelFutureListener fire（释放）了事件
                 pipeline.invokeHandlerAddedIfNeeded();
 
                 safeSetSuccess(promise);

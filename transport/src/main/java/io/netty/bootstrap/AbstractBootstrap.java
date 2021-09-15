@@ -312,6 +312,8 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
         }
     }
 
+    // 1.创建NioServerSocketChannel通道
+    // 2.初始化channel
     final ChannelFuture initAndRegister() {
         Channel channel = null;
         try {

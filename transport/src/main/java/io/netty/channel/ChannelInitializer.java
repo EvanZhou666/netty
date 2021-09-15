@@ -26,17 +26,17 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A special {@link ChannelInboundHandler} which offers an easy way to initialize a {@link Channel} once it was
- * registered to its {@link EventLoop}.
+ * A special ChannelInboundHandler which offers an easy way to initialize a Channel once it was
+ * registered to its EventLoop.
  *
- * Implementations are most often used in the context of {@link Bootstrap#handler(ChannelHandler)} ,
- * {@link ServerBootstrap#handler(ChannelHandler)} and {@link ServerBootstrap#childHandler(ChannelHandler)} to
- * setup the {@link ChannelPipeline} of a {@link Channel}.
+ * Implementations are most often used in the context of Bootstrap#handler(ChannelHandler) ,
+ * ServerBootstrap#handler(ChannelHandler) and  ServerBootstrap#childHandler(ChannelHandler) to
+ * setup the ChannelPipeline of a Channel.
  *
  * <pre>
  *
- * public class MyChannelInitializer extends {@link ChannelInitializer} {
- *     public void initChannel({@link Channel} channel) {
+ * public class MyChannelInitializer extends ChannelInitializer {
+ *     public void initChannel(Channel channel) {
  *         channel.pipeline().addLast("myHandler", new MyHandler());
  *     }
  * }
@@ -46,7 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * bootstrap.childHandler(new MyChannelInitializer());
  * ...
  * </pre>
- * Be aware that this class is marked as {@link Sharable} and so the implementation must be safe to be re-used.
+ * Be aware that this class is marked as Sharable and so the implementation must be safe to be re-used.
  *
  * @param <C>   A sub-type of {@link Channel}
  */

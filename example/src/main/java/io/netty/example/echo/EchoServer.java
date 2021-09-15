@@ -56,10 +56,10 @@ public final class EchoServer {
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class)
-             .option(ChannelOption.SO_BACKLOG, 100)
+             .channel(NioServerSocketChannel.class)// 通过反射工厂创建NioServerSocketChannel实例
+             .option(ChannelOption.SO_BACKLOG, 100)// 指定创建channel时候的配置参数
              .handler(new LoggingHandler(LogLevel.INFO))
-             .childHandler(new ChannelInitializer<SocketChannel>() {
+             .childHandler(new ChannelInitializer<SocketChannel>() {// 设置channel上的处理器，处理请求
                  @Override
                  public void initChannel(SocketChannel ch) throws Exception {
                      ChannelPipeline p = ch.pipeline();

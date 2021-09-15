@@ -20,8 +20,8 @@ import io.netty.buffer.ByteBufHolder;
 import io.netty.buffer.ByteBufUtil;
 
 /**
- * Used to control the format and verbosity of logging for {@link ByteBuf}s and {@link ByteBufHolder}s.
  *
+ * 用于控制 {@link ByteBuf} 和 {@link ByteBufHolder} 的日志记录格式和详细程度
  * @see LoggingHandler
  */
 public enum ByteBufFormat {

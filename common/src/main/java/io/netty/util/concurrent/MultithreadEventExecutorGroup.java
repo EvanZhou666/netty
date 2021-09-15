@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class MultithreadEventExecutorGroup extends AbstractEventExecutorGroup {
 
+    // 实际上就是NioEventLoop的集合
     private final EventExecutor[] children;
     private final Set<EventExecutor> readonlyChildren;
     private final AtomicInteger terminatedChildren = new AtomicInteger();
@@ -73,14 +74,18 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         checkPositive(nThreads, "nThreads");
 
         if (executor == null) {
+            // executor 这里就是一个线程池，但是没有看到线程的个数有限制，也没有看到有等待队列
+            // newDefaultThreadFactory 定义了如何生产线程，也就是指定线程的名称，是否是daemon，优先级等等
             executor = new ThreadPerTaskExecutor(newDefaultThreadFactory());
         }
 
+        // children 是一个特殊的EventExecutorGroup，查看线程是否在执行事件循环
         children = new EventExecutor[nThreads];
 
         for (int i = 0; i < nThreads; i ++) {
             boolean success = false;
             try {
+                // NioEventLoop的实例，实例中包含了打开的Selector和Executor执行器
                 children[i] = newChild(executor, args);
                 success = true;
             } catch (Exception e) {
@@ -120,6 +125,8 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         };
 
         for (EventExecutor e: children) {
+            // todo 代码review 是谁出发e.terminationFuture()发生的回调呢？
+            // todo answer 回调是在io.netty.util.concurrent.SingleThreadEventExecutor.doStartThread方法里的finally块触发的
             e.terminationFuture().addListener(terminationListener);
         }
 

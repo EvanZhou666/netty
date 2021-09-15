@@ -148,10 +148,10 @@ import io.netty.channel.ChannelHandlerContext;
  * header from the frame.  If you don't want to strip the prepended header, you
  * could specify <tt>0</tt> for <tt>initialBytesToSkip</tt>.
  * <pre>
- * lengthFieldOffset   = 1 (= the length of HDR1)
- * lengthFieldLength   = 2
- * <b>lengthAdjustment</b>    = <b>1</b> (= the length of HDR2)
- * <b>initialBytesToStrip</b> = <b>3</b> (= the length of HDR1 + LEN)
+ * lengthFieldOffset   = 1 // 长度字段偏移量 (= the length of HDR1)
+ * lengthFieldLength   = 2 // 长度字段长度
+ * lengthAdjustment    = 1 // 以长度字段为内容，还有几个字节是内容 (= the length of HDR2)
+ * initialBytesToStrip = 3  // 从头剥离几个字节 (= the length of HDR1 + LEN)
  *
  * BEFORE DECODE (16 bytes)                       AFTER DECODE (13 bytes)
  * +------+--------+------+----------------+      +------+----------------+

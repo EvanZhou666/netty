@@ -46,6 +46,8 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+//        ByteBuf byteBuf = (ByteBuf) msg;
+        System.out.println("receive from server:" + msg.toString());
         ctx.write(msg);
     }
 
