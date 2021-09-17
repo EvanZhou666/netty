@@ -192,7 +192,7 @@
         <argLine.alpnAgent />
         <argLine.java9.extras />
         <!-- Export some stuff which is used during our tests -->
-        <argLine.java9>--illegal-access=deny ${argLine.java9.extras}</argLine.java9>
+        <argLine.java9>--illegal-access=permit ${argLine.java9.extras}</argLine.java9>
         <forbiddenapis.skip>true</forbiddenapis.skip>
         <!-- Needed because of https://issues.apache.org/jira/browse/MENFORCER-275 -->
         <enforcer.plugin.version>3.0.0-M3</enforcer.plugin.version>
@@ -1132,65 +1132,65 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.1.0</version>
-        <executions>
-          <execution>
-            <id>check-style</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <phase>validate</phase>
-            <configuration>
-              <consoleOutput>true</consoleOutput>
-              <logViolationsToConsole>true</logViolationsToConsole>
-              <failsOnError>true</failsOnError>
-              <failOnViolation>true</failOnViolation>
-              <configLocation>io/netty/checkstyle.xml</configLocation>
-              <sourceDirectories>
-                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
-              </sourceDirectories>
-            </configuration>
-          </execution>
-          <execution>
-            <id>nohttp-checkstyle-validation</id>
-            <phase>validate</phase>
-            <configuration>
-              <!-- skip>false</skip -->
-              <configLocation>nohttp-checkstyle.xml</configLocation>
-              <suppressionsLocation>nohttp-checkstyle-suppressions.xml</suppressionsLocation>
-              <!-- propertyExpansion>main.basedir=${main.basedir}</propertyExpansion -->
-              <encoding>UTF-8</encoding>
-              <sourceDirectories>${basedir}</sourceDirectories>
-              <includes>**/*</includes>
-              <excludes>nohttp-checkstyle-suppressions.xml,**/.git/**/*,**/.idea/**/*,**/target/**/,**/.flattened-pom.xml,**/*.class</excludes>
-            </configuration>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <inherited>false</inherited>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>8.29</version>
-          </dependency>
-          <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>netty-build-common</artifactId>
-            <version>${netty.build.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>io.spring.nohttp</groupId>
-            <artifactId>nohttp-checkstyle</artifactId>
-            <version>0.0.5.RELEASE</version>
-          </dependency>
-        </dependencies>
-      </plugin>
+<!--      <plugin>-->
+<!--        <artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--        <version>3.1.0</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>check-style</id>-->
+<!--            <goals>-->
+<!--              <goal>check</goal>-->
+<!--            </goals>-->
+<!--            <phase>validate</phase>-->
+<!--            <configuration>-->
+<!--              <consoleOutput>true</consoleOutput>-->
+<!--              <logViolationsToConsole>true</logViolationsToConsole>-->
+<!--              <failsOnError>true</failsOnError>-->
+<!--              <failOnViolation>true</failOnViolation>-->
+<!--              <configLocation>io/netty/checkstyle.xml</configLocation>-->
+<!--              <sourceDirectories>-->
+<!--                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>-->
+<!--                <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>-->
+<!--              </sourceDirectories>-->
+<!--            </configuration>-->
+<!--          </execution>-->
+<!--          <execution>-->
+<!--            <id>nohttp-checkstyle-validation</id>-->
+<!--            <phase>validate</phase>-->
+<!--            <configuration>-->
+<!--              &lt;!&ndash; skip>false</skip &ndash;&gt;-->
+<!--              <configLocation>nohttp-checkstyle.xml</configLocation>-->
+<!--              <suppressionsLocation>nohttp-checkstyle-suppressions.xml</suppressionsLocation>-->
+<!--              &lt;!&ndash; propertyExpansion>main.basedir=${main.basedir}</propertyExpansion &ndash;&gt;-->
+<!--              <encoding>UTF-8</encoding>-->
+<!--              <sourceDirectories>${basedir}</sourceDirectories>-->
+<!--              <includes>**/*</includes>-->
+<!--              <excludes>nohttp-checkstyle-suppressions.xml,**/.git/**/*,**/.idea/**/*,**/target/**/,**/.flattened-pom.xml,**/*.class</excludes>-->
+<!--            </configuration>-->
+<!--            <goals>-->
+<!--              <goal>check</goal>-->
+<!--            </goals>-->
+<!--            <inherited>false</inherited>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--        <dependencies>-->
+<!--          <dependency>-->
+<!--            <groupId>com.puppycrawl.tools</groupId>-->
+<!--            <artifactId>checkstyle</artifactId>-->
+<!--            <version>8.29</version>-->
+<!--          </dependency>-->
+<!--          <dependency>-->
+<!--            <groupId>${project.groupId}</groupId>-->
+<!--            <artifactId>netty-build-common</artifactId>-->
+<!--            <version>${netty.build.version}</version>-->
+<!--          </dependency>-->
+<!--          <dependency>-->
+<!--            <groupId>io.spring.nohttp</groupId>-->
+<!--            <artifactId>nohttp-checkstyle</artifactId>-->
+<!--            <version>0.0.5.RELEASE</version>-->
+<!--          </dependency>-->
+<!--        </dependencies>-->
+<!--      </plugin>-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>xml-maven-plugin</artifactId>
@@ -1618,19 +1618,19 @@
                     <ignore />
                   </action>
                 </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <versionRange>[1.0,)</versionRange>
-                    <goals>
-                      <goal>check</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
+<!--                <pluginExecution>-->
+<!--                  <pluginExecutionFilter>-->
+<!--                    <groupId>org.apache.maven.plugins</groupId>-->
+<!--                    <artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--                    <versionRange>[1.0,)</versionRange>-->
+<!--                    <goals>-->
+<!--                      <goal>check</goal>-->
+<!--                    </goals>-->
+<!--                  </pluginExecutionFilter>-->
+<!--                  <action>-->
+<!--                    <ignore />-->
+<!--                  </action>-->
+<!--                </pluginExecution>-->
                 <pluginExecution>
                   <pluginExecutionFilter>
                     <groupId>org.apache.maven.plugins</groupId>
