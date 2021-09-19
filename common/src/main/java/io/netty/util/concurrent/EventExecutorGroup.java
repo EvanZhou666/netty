@@ -30,7 +30,8 @@ import java.util.concurrent.TimeUnit;
 public interface EventExecutorGroup extends ScheduledExecutorService, Iterable<EventExecutor> {
 
     /**
-     * 当且仅当此 {@link EventExecutorGroup} 管理的所有 {@link EventExecutor} 都被 {@linkplain shutdownGracefully() 正常关闭} 或 {@linkplain isShutdown() 关闭} 时返回 {@code true}.
+     * 当且仅当此 {@link EventExecutorGroup} 管理的所有 {@link EventExecutor} 都被 {@linkplain shutdownGracefully() 正常关闭}
+     * 或 {@linkplain isShutdown() 关闭} 时返回 {@code true}.
      */
     boolean isShuttingDown();
 
