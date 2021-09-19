@@ -34,7 +34,7 @@ import static io.netty.util.internal.ObjectUtil.checkNotNull;
  * The {@link PlatformDependent} operations which requires access to {@code sun.misc.*}.
  */
 @SuppressJava6Requirement(reason = "Unsafe access is guarded")
-final class PlatformDependent0 {
+public final class PlatformDependent0 {
 
     private static final InternalLogger logger = InternalLoggerFactory.getInstance(PlatformDependent0.class);
     private static final long ADDRESS_FIELD_OFFSET;
@@ -567,7 +567,7 @@ final class PlatformDependent0 {
         return BYTE_ARRAY_BASE_OFFSET;
     }
 
-    static Object getObject(Object object, long fieldOffset) {
+    public static Object getObject(Object object, long fieldOffset) {
         return UNSAFE.getObject(object, fieldOffset);
     }
 
@@ -579,7 +579,7 @@ final class PlatformDependent0 {
         return UNSAFE.getLong(object, fieldOffset);
     }
 
-    static long objectFieldOffset(Field field) {
+    public static long objectFieldOffset(Field field) {
         return UNSAFE.objectFieldOffset(field);
     }
 
