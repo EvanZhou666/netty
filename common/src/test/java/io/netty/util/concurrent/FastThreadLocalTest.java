@@ -42,7 +42,7 @@ public class FastThreadLocalTest {
 
     @Test
     public void testGetIfExists() {
-        FastThreadLocal<Boolean> threadLocal = new FastThreadLocal<Boolean>() {
+        final FastThreadLocal<Boolean> threadLocal = new FastThreadLocal<Boolean>() {
             @Override
             protected Boolean initialValue() {
                 return Boolean.TRUE;
@@ -51,8 +51,16 @@ public class FastThreadLocalTest {
 
         assertNull(threadLocal.getIfExists());
         assertTrue(threadLocal.get());
-        assertTrue(threadLocal.getIfExists());
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Boolean aBoolean = threadLocal.get();
+                System.out.println(aBoolean);
+            }
+        }).start();
+
+        assertTrue(threadLocal.getIfExists());
         FastThreadLocal.removeAll();
         assertNull(threadLocal.getIfExists());
     }
