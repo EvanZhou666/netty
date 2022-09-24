@@ -192,7 +192,7 @@
         <argLine.alpnAgent />
         <argLine.java9.extras />
         <!-- Export some stuff which is used during our tests -->
-        <argLine.java9>--illegal-access=permit ${argLine.java9.extras}</argLine.java9>
+        <argLine.java9>--illegal-access=deny ${argLine.java9.extras}</argLine.java9>
         <forbiddenapis.skip>true</forbiddenapis.skip>
         <!-- Needed because of https://issues.apache.org/jira/browse/MENFORCER-275 -->
         <enforcer.plugin.version>3.0.0-M3</enforcer.plugin.version>
@@ -1196,13 +1196,13 @@
         <artifactId>xml-maven-plugin</artifactId>
         <version>1.0.1</version>
         <executions>
-          <execution>
+          <!--<execution>
             <id>check-style</id>
             <goals>
               <goal>check-format</goal>
             </goals>
             <phase>validate</phase>
-          </execution>
+          </execution>-->
         </executions>
         <configuration>
           <formatFileSets>
@@ -1234,34 +1234,34 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <includes>
-            <include>**/*Test*.java</include>
-            <include>**/*Benchmark*.java</include>
-          </includes>
-          <excludes>
-            <exclude>**/Abstract*</exclude>
-            <exclude>**/*TestUtil*</exclude>
-          </excludes>
-          <runOrder>random</runOrder>
-          <systemPropertyVariables>
-            <logback.configurationFile>${logging.config}</logback.configurationFile>
-            <logLevel>${logging.logLevel}</logLevel>
-          </systemPropertyVariables>
-          <argLine>${argLine.common} ${argLine.printGC} ${argLine.alpnAgent} ${argLine.leak} ${argLine.coverage} ${argLine.noUnsafe} ${argLine.java9} ${argLine.javaProperties}</argLine>
-          <properties>
-            <property>
-              <name>listener</name>
-              <value>io.netty.build.junit.TimedOutTestsListener</value>
-            </property>
-          </properties>
-          <jvm>${testJvm}</jvm>
-           <!-- Ensure the whole stacktrace is preserved when an exception is thrown. See https://issues.apache.org/jira/browse/SUREFIRE-1457 -->
-          <trimStackTrace>false</trimStackTrace>
-        </configuration>
-      </plugin>
+<!--      <plugin>-->
+<!--        <artifactId>maven-surefire-plugin</artifactId>-->
+<!--        <configuration>-->
+<!--          <includes>-->
+<!--            <include>**/*Test*.java</include>-->
+<!--            <include>**/*Benchmark*.java</include>-->
+<!--          </includes>-->
+<!--          <excludes>-->
+<!--            <exclude>**/Abstract*</exclude>-->
+<!--            <exclude>**/*TestUtil*</exclude>-->
+<!--          </excludes>-->
+<!--          <runOrder>random</runOrder>-->
+<!--          <systemPropertyVariables>-->
+<!--            <logback.configurationFile>${logging.config}</logback.configurationFile>-->
+<!--            <logLevel>${logging.logLevel}</logLevel>-->
+<!--          </systemPropertyVariables>-->
+<!--          <argLine>${argLine.common} ${argLine.printGC} ${argLine.alpnAgent} ${argLine.leak} ${argLine.coverage} ${argLine.noUnsafe} ${argLine.java9} ${argLine.javaProperties}</argLine>-->
+<!--          <properties>-->
+<!--            <property>-->
+<!--              <name>listener</name>-->
+<!--              <value>io.netty.build.junit.TimedOutTestsListener</value>-->
+<!--            </property>-->
+<!--          </properties>-->
+<!--          <jvm>${testJvm}</jvm>-->
+<!--           &lt;!&ndash; Ensure the whole stacktrace is preserved when an exception is thrown. See https://issues.apache.org/jira/browse/SUREFIRE-1457 &ndash;&gt;-->
+<!--          <trimStackTrace>false</trimStackTrace>-->
+<!--        </configuration>-->
+<!--      </plugin>-->
       <!-- always produce osgi bundles -->
       <plugin>
         <groupId>org.apache.felix</groupId>
@@ -1783,4 +1783,62 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>public</id>
+      <url>http://maven.nuxeo.org/nexus/content/groups/public</url>
+      <name>Nuxeo virtual release repository</name>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>public-snapshot</id>
+      <url>
+        http://maven.nuxeo.org/nexus/content/groups/public-snapshot
+      </url>
+      <name>Nuxeo virtual snapshot repository</name>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>always</updatePolicy>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+<!--    <pluginRepository>-->
+<!--      <id>public</id>-->
+<!--      <name>aliyun nexus</name>-->
+<!--      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
+<!--      <releases>-->
+<!--        <enabled>true</enabled>-->
+<!--      </releases>-->
+<!--      <snapshots>-->
+<!--        <enabled>false</enabled>-->
+<!--      </snapshots>-->
+<!--    </pluginRepository>-->
+  </pluginRepositories>
+
+  <repositories>
+    <repository>
+      <!-- id必须唯一 -->
+      <id>jboss-repository</id>
+      <!-- 见名知意即可 -->
+      <name>jboss repository</name>
+      <!-- 仓库的url地址 -->
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+    </repository>
+    <repository>
+      <!-- id必须唯一 -->
+      <id>aliyun-repository</id>
+      <!-- 见名知意即可 -->
+      <name>aliyun repository</name>
+      <!-- 仓库的url地址 -->
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+    </repository>
+  </repositories>
 </project>
