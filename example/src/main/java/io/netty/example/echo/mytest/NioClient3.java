@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class NioClient3 {
-    private static Logger logger = LoggerFactory.getLogger(NioClientSecond.class);
+    private static Logger logger = LoggerFactory.getLogger(NioClient3.class);
 
     static final String HOST = System.getProperty("host", "192.160.0.33");
     static final int PORT = Integer.parseInt(System.getProperty("port", "8007"));

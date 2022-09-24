@@ -20,7 +20,7 @@ public class HttpServer {
 
     static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
 
-    static Logger logger = LoggerFactory.getLogger(NioServer.class);
+    static Logger logger = LoggerFactory.getLogger(HttpServer.class);
 
     public static void main(String[] args) throws InterruptedException {
 
