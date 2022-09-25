@@ -378,6 +378,8 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         for (;;) {
             try {
                 // 真正的注册操作，把java的channel注册到java的Selector上，this实际上就是NioServerSocketChannel，它会被绑定到SelectionKey上
+                // boss线程注册accpet事件到selector
+                // work线程注册读写事件到selector
                 selectionKey = javaChannel().register(eventLoop().unwrappedSelector(), 0, this);
                 return;
             } catch (CancelledKeyException e) {

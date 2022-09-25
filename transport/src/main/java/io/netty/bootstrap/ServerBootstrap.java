@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
- * {@link Bootstrap} sub-class which allows easy bootstrap of {@link ServerChannel}
+ * {@link Bootstrap} 子类，允许轻松引导 {@link ServerChannel}。服务端启动过程中的核心类了。accept连接，给socketChannel注册读写事件
  *
  */
 public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerChannel> {
@@ -207,13 +207,14 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         @SuppressWarnings("unchecked")
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
             final Channel child = (Channel) msg;
-
+            //netty启动过程中的核心流程，为工作线程设置处理器
             child.pipeline().addLast(childHandler);
 
             setChannelOptions(child, childOptions, logger);
             setAttributes(child, childAttrs);
 
             try {
+                // childGroup就是WorkEventLoopGroup，把channel注册到WorkEventLoopGroup的某个EventLoop上
                 childGroup.register(child).addListener(new ChannelFutureListener() {
                     @Override
                     public void operationComplete(ChannelFuture future) throws Exception {

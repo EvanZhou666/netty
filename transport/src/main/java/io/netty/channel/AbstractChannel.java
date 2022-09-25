@@ -477,16 +477,17 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                 return;
             }
 
-            AbstractChannel.this.eventLoop = eventLoop;
+            AbstractChannel.this.eventLoop = eventLoop;// boss线程首次运行到这里，是为了绑定channel到workEventLoopGroup，这个时候还没有绑定线程
 
             if (eventLoop.inEventLoop()) { // todo 代码review 怎么判断事件是否在循环中
                 register0(promise);
             } else {
                 try {
                     // 异步注册ServerSocketChannel到selector
-                    eventLoop.execute(new Runnable() {
+                    eventLoop.execute(new Runnable() {// 只要一提交，线程就会切换了，有可能是切换到work线程
                         @Override
                         public void run() {
+                            // 注册channel的读写也是从这里进来的
                             register0(promise);
                         }
                     });
