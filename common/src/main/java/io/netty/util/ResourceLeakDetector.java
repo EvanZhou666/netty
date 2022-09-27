@@ -242,6 +242,7 @@ public class ResourceLeakDetector<T> {
      */
     @SuppressWarnings("unchecked")
     public final ResourceLeakTracker<T> track(T obj) {
+        // 给每个ByteBuf创建一个ResourceLeakTracker内存泄漏追踪者。
         return track0(obj);
     }
 
