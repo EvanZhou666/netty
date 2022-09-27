@@ -37,6 +37,7 @@ import org.junit.jupiter.api.Timeout;
 import static io.netty.buffer.PoolChunk.runOffset;
 import static io.netty.buffer.PoolChunk.runPages;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -407,7 +408,8 @@ public class PooledByteBufAllocatorTest extends AbstractByteBufAllocatorTest<Poo
     }
 
     @Test
-    @Timeout(value = 3000, unit = MILLISECONDS)
+//    @Timeout(value = 3000, unit = MILLISECONDS)
+    @Timeout(value = 3000, unit = SECONDS)
     public void testNumThreadCachesWithNoDirectArenas() throws InterruptedException {
         int numHeapArenas = 1;
         final PooledByteBufAllocator allocator =

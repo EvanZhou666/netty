@@ -158,6 +158,7 @@ abstract class PoolArena<T> extends SizeClasses implements PoolArenaMetric {
         final boolean needsNormalAllocation;
         synchronized (head) {
             final PoolSubpage<T> s = head.next;
+            // 判断是否成环，如果s和head相等说明成环了。
             needsNormalAllocation = s == head;
             if (!needsNormalAllocation) {
                 assert s.doNotDestroy && s.elemSize == sizeIdx2size(sizeIdx);
@@ -169,6 +170,7 @@ abstract class PoolArena<T> extends SizeClasses implements PoolArenaMetric {
 
         if (needsNormalAllocation) {
             synchronized (this) {
+                // 排除万难，终于来到这里了，首次分配不会经过乱七八糟的缓存，....
                 allocateNormal(buf, reqCapacity, sizeIdx, cache);
             }
         }
@@ -543,7 +545,7 @@ abstract class PoolArena<T> extends SizeClasses implements PoolArenaMetric {
         HeapArena(PooledByteBufAllocator parent, int pageSize, int pageShifts,
                   int chunkSize, int directMemoryCacheAlignment) {
             super(parent, pageSize, pageShifts, chunkSize,
-                  directMemoryCacheAlignment);
+                    directMemoryCacheAlignment);
         }
 
         private static byte[] newByteArray(int size) {

@@ -187,6 +187,7 @@ public class PooledByteBufAllocator extends AbstractByteBufAllocator implements 
     private final List<PoolArenaMetric> directArenaMetrics;
     private final PoolThreadLocalCache threadCache;
     private final int chunkSize;
+    // 池化ByteBuf分配器的指标
     private final PooledByteBufAllocatorMetric metric;
 
     public PooledByteBufAllocator() {
@@ -260,6 +261,18 @@ public class PooledByteBufAllocator extends AbstractByteBufAllocator implements 
              useCacheForAllThreads, directMemoryCacheAlignment);
     }
 
+    /**
+     *
+     * @param preferDirect 是否偏爱使用直接内存
+     * @param nHeapArena 堆Arena数量
+     * @param nDirectArena 直接内存Arena数量
+     * @param pageSize page大小 默认8K，等于8192字节
+     * @param maxOrder
+     * @param smallCacheSize
+     * @param normalCacheSize
+     * @param useCacheForAllThreads
+     * @param directMemoryCacheAlignment
+     */
     public PooledByteBufAllocator(boolean preferDirect, int nHeapArena, int nDirectArena, int pageSize, int maxOrder,
                                   int smallCacheSize, int normalCacheSize,
                                   boolean useCacheForAllThreads, int directMemoryCacheAlignment) {
@@ -278,8 +291,8 @@ public class PooledByteBufAllocator extends AbstractByteBufAllocator implements 
             pageSize = (int) PlatformDependent.align(pageSize, directMemoryCacheAlignment);
         }
 
+        // chunk是向操作系统申请内存的最小单元，默认1个chunk是16M，最大不能超过1G
         chunkSize = validateAndCalculateChunkSize(pageSize, maxOrder);
-
         checkPositiveOrZero(nHeapArena, "nHeapArena");
         checkPositiveOrZero(nDirectArena, "nDirectArena");
 
@@ -288,11 +301,13 @@ public class PooledByteBufAllocator extends AbstractByteBufAllocator implements 
             throw new IllegalArgumentException("directMemoryCacheAlignment is not supported");
         }
 
+        // 判断一个数是不是2的幂，常见位运算固定套路 (val & -val) == val
         if ((directMemoryCacheAlignment & -directMemoryCacheAlignment) != directMemoryCacheAlignment) {
             throw new IllegalArgumentException("directMemoryCacheAlignment: "
                     + directMemoryCacheAlignment + " (expected: power of two)");
         }
 
+        // 对pageSize取对数
         int pageShifts = validateAndCalculatePageShifts(pageSize, directMemoryCacheAlignment);
 
         if (nHeapArena > 0) {
