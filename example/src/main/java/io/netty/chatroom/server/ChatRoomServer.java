@@ -33,7 +33,9 @@ public class ChatRoomServer {
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)// 通过反射工厂创建NioServerSocketChannel实例
                     .option(ChannelOption.SO_BACKLOG, 100)// 指定创建channel时候的配置参数
+                    // handler中设置的处理器是给Acceptor用的。即Reactor boss主线程
                     .handler(new LoggingHandler(LogLevel.INFO))
+                    //childHandler（）是给worker线程用的
                     .childHandler(new ChannelInitializer<SocketChannel>() {// 设置channel上的处理器，处理请求
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {

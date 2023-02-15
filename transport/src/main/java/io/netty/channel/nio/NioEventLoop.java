@@ -68,6 +68,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
     private final IntSupplier selectNowSupplier = new IntSupplier() {
         @Override
         public int get() throws Exception {
+            // TODO Evan ，返回就绪的key数量，可能返回0
             return selectNow();
         }
     };
@@ -437,6 +438,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
             try {
                 int strategy;
                 try {
+                    // TODO Evan，如果队列里有定时任务需要处理，则就绪key的数量（如果没有就绪keys返回为0）；反之返回-1，采用阻塞式的Select策略
                     strategy = selectStrategy.calculateStrategy(selectNowSupplier, hasTasks());
                     switch (strategy) {
                     case SelectStrategy.CONTINUE:
@@ -446,13 +448,17 @@ public final class NioEventLoop extends SingleThreadEventLoop {
                         // fall-through to SELECT since the busy-wait is not supported with NIO
 
                     case SelectStrategy.SELECT:
+                        // TODO Evan，如果没有可执行任务，返回-1
                         long curDeadlineNanos = nextScheduledTaskDeadlineNanos();
                         if (curDeadlineNanos == -1L) {
+                            // TODO Evan,设置为Long 最大值
                             curDeadlineNanos = NONE; // nothing on the calendar
                         }
                         nextWakeupNanos.set(curDeadlineNanos);
                         try {
+                            // TODO Evan 没有要执行的任务，可以进入Slect无限阻塞
                             if (!hasTasks()) {
+                                // TODO Evan，返回read-operation set中有更新的keys数目，可能为0
                                 strategy = select(curDeadlineNanos);
                             }
                         } finally {
@@ -475,6 +481,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
                 selectCnt++;
                 cancelledKeys = 0;
                 needsToSelectAgain = false;
+                // TODO 默认50%
                 final int ioRatio = this.ioRatio;
                 boolean ranTasks;
                 if (ioRatio == 100) {
@@ -486,7 +493,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
                         // Ensure we always run tasks.
                         ranTasks = runAllTasks();
                     }
-                } else if (strategy > 0) {
+                } else if (strategy > 0) { // TODO Evan, 代表有就绪的IO事件要处理
                     final long ioStartTime = System.nanoTime();
                     try {
                         processSelectedKeys();
@@ -496,6 +503,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
                         ranTasks = runAllTasks(ioTime * (100 - ioRatio) / ioRatio);
                     }
                 } else {
+                    // TODO Evan，如果已经运行完了所有任务返回true，没有任务可以运行返回false
                     ranTasks = runAllTasks(0); // This will run the minimum number of tasks
                 }
 
@@ -651,6 +659,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
             final Object a = k.attachment();
 
             if (a instanceof AbstractNioChannel) {
+                // Evan TODO，处理IO就绪事件
                 processSelectedKey(k, (AbstractNioChannel) a);
             } else {
                 @SuppressWarnings("unchecked")
@@ -696,6 +705,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
             int readyOps = k.readyOps();
             // We first need to call finishConnect() before try to trigger a read(...) or write(...) as otherwise
             // the NIO JDK channel implementation may throw a NotYetConnectedException.
+            // TODO Evan 客户端是CONNECT事件 readyops =8
             if ((readyOps & SelectionKey.OP_CONNECT) != 0) {
                 // remove OP_CONNECT as otherwise Selector.select(..) will always return without blocking
                 // See https://github.com/netty/netty/issues/924
@@ -714,6 +724,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
 
             // Also check for readOps of 0 to workaround possible JDK bug which may otherwise lead
             // to a spin loop
+            // TODO Evan 服务端是ACCEPT事件，readyops =16
             if ((readyOps & (SelectionKey.OP_READ | SelectionKey.OP_ACCEPT)) != 0 || readyOps == 0) {
                 unsafe.read();
             }
@@ -806,10 +817,13 @@ public final class NioEventLoop extends SingleThreadEventLoop {
 
     private int select(long deadlineNanos) throws IOException {
         if (deadlineNanos == NONE) {
+            // TODO Evan, 阻塞式调用，至少有一个channel上有就绪事件可以处理时返回；或者是线程被中断后返回
             return selector.select();
         }
         // Timeout will only be 0 if deadline is within 5 microsecs
+        // TODO Evan , 换算超时时间，纳秒转换为毫秒，如果传进来的超时时间小于5微秒，则认为超时时间等于0；也就是说传进来的超时时间最少要设置为5微妙
         long timeoutMillis = deadlineToDelayNanos(deadlineNanos + 995000L) / 1000000L;
+        // TODO Evan, selectNow() 非阻塞调用，即使没有就绪事件也会返回
         return timeoutMillis <= 0 ? selector.selectNow() : selector.select(timeoutMillis);
     }
 
